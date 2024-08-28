@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import cv2
 import numpy as np
 import tempfile
@@ -45,3 +46,6 @@ while capture.isOpened():
     #Press q to terminate 
     if cv2.waitKey(1) == ord('q'):
         break
+=======
+
+>>>>>>> origin/main
