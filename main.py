@@ -1,12 +1,16 @@
-<<<<<<< HEAD
 import cv2
 import numpy as np
 import tempfile
 from PIL import Image as img
 
+
+#Save Temp Image
 def save_temp_image(pil_image):
-    with tempfile.NamedTemporaryFile(suffix='.png',delete=False) as tempfile:
-        temp
+    with tempfile.NamedTemporaryFile(suffix='.png',delete=True) as tempfile:
+        temp_file_path = tempfile.name
+        pil_image.save(temp_file_path)
+        print(f"Image was saved temporairily at {temp_file_path}")
+        return temp_file_path
     
 #Capture Video
 video_path = 'example.mp4'
@@ -26,6 +30,9 @@ ret, frame = capture.read()
 if not ret: 
     print("Could not read frame")
     exit()
+pil_image = img.fromarray(frame)
+temp_path = save_temp_image(pil_image)
+
 
 
 
@@ -46,6 +53,3 @@ while capture.isOpened():
     #Press q to terminate 
     if cv2.waitKey(1) == ord('q'):
         break
-=======
-
->>>>>>> origin/main
