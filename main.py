@@ -4,6 +4,10 @@ import tempfile
 from PIL import Image as img
 import os
 import requests
+from segment_anything import sam_model_registry, SamPredictor
+import torch
+import numpy as np
+
 
 def check_readability(ret):
     if not ret: 
@@ -11,15 +15,6 @@ def check_readability(ret):
         exit()
     else: 
         print("Frame is read")
-
-def save_temp_image(pil_image):
-    with tempfile.NamedTemporaryFile(suffix='.png',delete=False) as tp:
-        temp_file_path = tp.name
-        pil_image.save(temp_file_path)
-        print(f"Image was saved temporairily at {temp_file_path}")
-        tp.flush()
-        return temp_file_path
-
 
 
 #Capture Video
@@ -33,21 +28,32 @@ if not capture.isOpened():
 
 #Set Custom Frame
 num_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
-custom_frame = int(input(f"What frame would you like to train from from 1 to {num_frames}: "))
-capture.set(cv2.CAP_PROP_POS_FRAMES, custom_frame)
 ret, frame = capture.read()
 check_readability(ret)
 
-#Create Temp Image 
-pil_image = img.fromarray(frame)
-temp_path = save_temp_image(pil_image)
 
+#Use Sam model to mask images 
+model_path = "sam_vit_h_4b8939.pth"
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = sam_model_registry["vit_h"](pretrained = False)
+model.load_state_dict(torch.load(model_path, map_location=device))
+model.to(device)
+model.eval()
 
+predictor = SamPredictor(model)
+predictor.initialize_tracking(frame)
 
+while True: 
+    ret, frame = capture.read()
+    if not ret: 
+        break
 
+    masks,scores = predictor.track(frame)
 
+    for mask, score in zip(mask,scores):
+        print(f"Mask shape: {mask.shape}, Score:{score}")
 
-
+capture.release()
 
 '''
 #Train YOLO through each frame 
