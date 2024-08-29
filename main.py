@@ -2,17 +2,18 @@ import cv2
 import numpy as np
 import tempfile
 from PIL import Image as img
-from labelImg import labelImg as label
 import subprocess as sp
+import os
 
+
+###Functions 
 def open_labelimg(temp_path):
     try: 
         command = f"labelImg {temp_path}"
-        sp.run(command, check = True)
+        sp.run(command,shell=True, check = True)
         print("Labelimg is opening")
-
     except sp.CalledProcessError as e:
-        print("An error has occured, cannot open labelImg:",e)
+        print("An error has occured, cannot open LabelImg:",e)
 
 def check_readability(ret):
     if not ret: 
@@ -28,7 +29,9 @@ def save_temp_image(pil_image):
         print(f"Image was saved temporairily at {temp_file_path}")
         tp.flush()
         return temp_file_path
-    
+
+
+
 #Capture Video
 video_path = "C:/Users/JP/Downloads/12267384_3840_2160_30fps.mp4"
 capture = cv2.VideoCapture(video_path)
@@ -40,7 +43,7 @@ if not capture.isOpened():
 
 #Set Custom Frame
 num_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
-custom_frame = int(input(f"What frame would you like to train from from 1 to {num_frames}"))
+custom_frame = int(input(f"What frame would you like to train from from 1 to {num_frames}: "))
 capture.set(cv2.CAP_PROP_POS_FRAMES, custom_frame)
 ret, frame = capture.read()
 check_readability(ret)
@@ -51,6 +54,7 @@ temp_path = save_temp_image(pil_image)
 
 #Custom Frame to file
 open_labelimg(temp_path)
+
 
 
 
@@ -72,4 +76,10 @@ while capture.isOpened():
     print("Press q to terminate manually") 
     if cv2.waitKey(1) == ord('q'):
         break
+        
+    
+    #Remove temp image
+    os.remove(temp_path) 
 '''
+
+
