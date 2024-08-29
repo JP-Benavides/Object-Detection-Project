@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 import tempfile
 from PIL import Image as img
-import roboflow
 import os
 import requests
 
@@ -49,14 +48,8 @@ check_readability(ret)
 pil_image = img.fromarray(frame)
 temp_path = save_temp_image(pil_image)
 
-#Export to Roboflow
-roboflow.login()
-rf = roboflow.Roboflow()
-<<<<<<< HEAD
-workspace = rf.workspace
 
-=======
->>>>>>> f1c025a6c2f3d22e328b2ea9be9d1bd282927004
+
 
 
 
