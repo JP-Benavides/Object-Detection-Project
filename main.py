@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import tempfile
 from PIL import Image as img
-import subprocess as sp
+import roboflow
 import os
 
 
