@@ -7,14 +7,6 @@ import os
 
 
 ###Functions 
-def open_labelimg(temp_path):
-    try: 
-        command = f"labelImg {temp_path}"
-        sp.run(command,shell=True, check = True)
-        print("Labelimg is opening")
-    except sp.CalledProcessError as e:
-        print("An error has occured, cannot open LabelImg:",e)
-
 def check_readability(ret):
     if not ret: 
         print("Could not read frame")
@@ -52,8 +44,9 @@ check_readability(ret)
 pil_image = img.fromarray(frame)
 temp_path = save_temp_image(pil_image)
 
-#Custom Frame to file
-open_labelimg(temp_path)
+#Export to Roboflow
+roboflow.login()
+rf = roboflow.Roboflow()
 
 
 
