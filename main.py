@@ -7,7 +7,11 @@ import os
 import requests
 
 
+<<<<<<< HEAD
 
+=======
+###Functions 
+>>>>>>> f1c025a6c2f3d22e328b2ea9be9d1bd282927004
 def check_readability(ret):
     if not ret: 
         print("Could not read frame")
@@ -48,8 +52,11 @@ temp_path = save_temp_image(pil_image)
 #Export to Roboflow
 roboflow.login()
 rf = roboflow.Roboflow()
+<<<<<<< HEAD
 workspace = rf.workspace
 
+=======
+>>>>>>> f1c025a6c2f3d22e328b2ea9be9d1bd282927004
 
 
 
